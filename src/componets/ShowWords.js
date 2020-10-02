@@ -6,12 +6,14 @@ import {
   StyleSheet,
   Linking,
   TouchableOpacity,
-  Button,
 } from 'react-native';
 import {connect} from 'react-redux';
-import {shuffleWords} from '../actions';
-
+import {shuffleWords, checkGrammar} from '../actions';
+import {Input} from 'react-native-elements';
+import {Button} from 'react-native-elements';
 class ShowWords extends Component {
+  state = {text: ''};
+
   onPressWord(item) {
     console.log('onPressWord', item);
     const url = `https://www.dictionary.com/browse/${item}`;
@@ -22,6 +24,13 @@ class ShowWords extends Component {
     console.log('reshuffleOnPress');
     this.props.shuffleWords();
   }
+
+  checkGrammarOnPress() {
+    console.log('checkGrammarOnPress');
+
+    this.props.checkGrammar(this.state.text);
+  }
+
   renderItem({item}) {
     const {word} = item;
 
@@ -36,21 +45,8 @@ class ShowWords extends Component {
 
   render() {
     return (
-      <View style={styles.mainContainer}>
-        <View style={styles.listContainer}>
-          <FlatList
-            data={this.props.words}
-            renderItem={this.renderItem.bind(this)}
-            keyExtractor={(word) => word.id}></FlatList>
-        </View>
-
-        <View style={styles.buttonContainer}>
-          <Button
-            style={styles.button}
-            title="re shuffle"
-            onPress={() => this.reshuffleOnPress()}
-          />
-        </View>
+      <View style={{flex: 1}}>
+        <View style={{flex: 1, backgroundColor: 'skyblue'}} />
       </View>
     );
   }
@@ -62,14 +58,17 @@ const mapStateToProps = (state) => {
 
   return {words: words};
 };
-export default connect(mapStateToProps, {shuffleWords})(ShowWords);
+export default connect(mapStateToProps, {shuffleWords, checkGrammar})(
+  ShowWords,
+);
 
 const styles = StyleSheet.create({
   mainContainer: {
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 20,
-    flex: 0,
+    backgroundColor: '#fff005',
+    flex: 1,
   },
 
   listContainer: {
